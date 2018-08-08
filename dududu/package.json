@@ -1,0 +1,25 @@
+{
+  "name": "dududu",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "filepond-plugin-file-validate-type": "^1.1.0",
+    "filepond-plugin-image-preview": "^1.1.0",
+    "mirrorx": "^0.2.11",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-dropzone": "^4.2.13",
+    "react-filepond": "^2.0.8",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "eslint-plugin-react": "^7.10.0"
+  }
+}
