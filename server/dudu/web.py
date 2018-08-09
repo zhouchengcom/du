@@ -1,11 +1,13 @@
 import logging
 
 from flask import Flask
-from flask_cors import CORS
+# from flask_cors import CORS
 
-
+from .virus import mod as virusmod
 from .minioclient import MinioInit
+from .config import SetConfig
 
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
@@ -19,7 +21,7 @@ if not app.config.from_envvar("DUDUCONFIG", silent=True):
 SetConfig(app.config)
 app.config["TRAP_BAD_REQUEST_ERRORS"] = True
 
-CORS(app)
+# CORS(app)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -31,5 +33,13 @@ MinioInit(
     app.config["MINIO"]["secure"],
 )
 
+
+
+
+
 # app.session_interface = MongoEngineSessionInterface(db)
-app.register_blueprint(proxymod, url_prefix="/api/proxy")
+app.register_blueprint(virusmod, url_prefix="/api")
+
+
+if __name__ == "__main__":
+    app.run()

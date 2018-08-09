@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Uploader from "./uploader";
-import { connect, actions,Link} from "mirrorx";
+import { connect, actions, Link } from "mirrorx";
 import faillogo from "./svg/illustration_error.svg";
 // Our app
 
@@ -16,11 +16,8 @@ const LOCALIZE_NUMBERS = !!(
   typeof navigator === "object"
 );
 
-
 const UNITS = ["B", "kB", "MB", "GB"];
-
-const requesturl =
-  "http://10.11.65.34:32769/my-bucketname/my-objectname?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=M4UE4EE0UV36DFSMBAC2%2F20180807%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180807T103340Z&X-Amz-Expires=259200&X-Amz-SignedHeaders=host&X-Amz-Signature=52e31170ec0680871171bc36053d4aae35d6a1958fd0432b4e8332792db0f3a2";
+const requesturl = "";
 function bytes(num) {
   if (num < 1) {
     return "0B";
@@ -61,12 +58,42 @@ class Fileuploader extends Component {
 
   onComplete() {
     console.log("finish");
+    this.NoticeCompleteUpload();
   }
+
   onError(error) {
     console.log(error);
     this.setState({ error: error });
   }
 
+  async NoticeCompleteUpload() {
+    try {
+      let params = { credentials: "same-origin" };
+      let respond = await fetch(
+        `/api/finishupload/${this.props.uplaodFile.name}`,
+        params
+      );
+      let value = await respond.json();
+      console.log(value);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async GetUploadUrl() {
+    try {
+      let params = { credentials: "same-origin" };
+      let respond = await fetch(
+        `/api/uplaodurl/${this.props.uplaodFile.name}`,
+        params
+      );
+      let value = await respond.json();
+      this.setState({ requesturl: value.url });
+      this.uploader.current.handleUpload([this.props.uplaodFile]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   componentDidMount() {
     console.log(this.uploader);
     if (
@@ -76,7 +103,8 @@ class Fileuploader extends Component {
       actions.routing.push("/");
       return;
     }
-    this.uploader.current.handleUpload([this.props.uplaodFile]);
+
+    this.GetUploadUrl();
   }
 
   renderProgress(state) {
@@ -120,8 +148,7 @@ class Fileuploader extends Component {
   }
   render() {
     var request = {
-      fileName: "name",
-      url: requesturl,
+      url: this.state.requesturl,
       method: "PUT"
     };
 
