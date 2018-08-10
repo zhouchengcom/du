@@ -4,6 +4,7 @@ import { Route } from "mirrorx";
 
 import Main from "./Main";
 import Fileuploader from "./Fileuploader";
+import Scan from "./scan"
 // Our app
 class App extends Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class App extends Component {
         <Route exact path="/" component={Main} />
 
         <Route path="/send" component={Fileuploader} />
+        <Route path="/scan/:name" component={Scan} />
       </div>
     );
   }

@@ -17,7 +17,7 @@ const LOCALIZE_NUMBERS = !!(
 );
 
 const UNITS = ["B", "kB", "MB", "GB"];
-const requesturl = "";
+
 function bytes(num) {
   if (num < 1) {
     return "0B";
@@ -75,6 +75,8 @@ class Fileuploader extends Component {
       );
       let value = await respond.json();
       console.log(value);
+
+      actions.routing.push(`/scan/${value.md5}`);
     } catch (err) {
       console.log(err);
     }
@@ -185,8 +187,7 @@ class ProgressBar extends Component {
       this.props.uplaodFile.size
     )}`;
     return (
-      <div>
-        <div className="page effect--fadeIn" />
+      <div className="main">
         <div className="title">{title}</div>
         <div className="description" />
         <div className="progressSection">

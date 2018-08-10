@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Dropzone from "./Dropzone";
-import { Route } from "mirrorx";
-import Fileuploader  from "./Fileuploader"
 // Our app
 class Main extends Component {
   constructor(props) {
@@ -15,7 +13,7 @@ class Main extends Component {
   render() {
     return (
       <div className="main">
-        <div id="page-one" className="effect--fadeIn">
+        <div  className="effect--fadeIn">
           <div className="title">私密、安全的文件分享服务</div>
           <div className="description">
             <div>
@@ -29,7 +27,6 @@ class Main extends Component {
             </a>
           </div>
           <Dropzone  />
-          <Route exact path="/send" component={Fileuploader} />
         </div>
       </div>
     );

@@ -12,6 +12,7 @@ from .config import conf
 from minio import ResponseError
 import hashlib
 from datetime import timedelta
+from .task.scan import Scan
 
 mod = Blueprint("virus", __name__)
 
@@ -57,24 +58,40 @@ def FinishUpload(name):
         return "not find file", 400
 
     db = redis.from_url(conf["REDIS"])
+
+    scanviruskey = "virus:%s" % md5
+    db.hset(scanviruskey, "state", "start")
+    db.hset(scanviruskey, "create_time", int(time.time()))
+    db.hset(scanviruskey, "name", name)
+
     for v in conf["SCAN_TYPE"]:
-        key = "%s:%s" % (md5, v)
+        key = "virus:%s:%s" % (md5, v)
         db.hset(key, "state", "waiting")
-        db.hset(key, "create_time", int(time.time()))
+        db.hset(key, "start_time", int(time.time()))
+
+        Scan.apply_async((md5, name, v, conf["REDIS"]), queue=v)
 
     return jsonify({"md5": md5})
 
 
 @mod.route("/scan/<name>", methods=["GET"])
 def GetScanResult(name):
-    if not GetMinio().bucket_exists(name):
-        return "not find file", 400
-
+    scanviruskey = "virus:%s" % name
     db = redis.from_url(conf["REDIS"])
-    result = {}
-    for v in conf["SCAN_TYPE"]:
-        key = "%s:%s" % (name, v)
-        value = db.hgetall(key)
-        result[v] = value
 
+    if not db.exists(scanviruskey):
+        return "not find result", 400
+
+    result = {"list": {}}
+    result.update(db.hgetall(scanviruskey))
+    finish = True
+    for v in conf["SCAN_TYPE"]:
+        key = "virus:%s:%s" % (name, v)
+        value = db.hgetall(key)
+        result['list'][v] = value
+        if "state" in value:
+            if value["state"] != "end":
+                finish = False
+    if finish:
+        result["state"] = "end" 
     return jsonify(result)

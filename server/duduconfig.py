@@ -10,4 +10,8 @@ MINIO = {
 REDIS = "redis://10.11.65.34:6379/0"
 
 
-SCAN_TYPE = ["windows"]
+SCAN_TYPE = ["WindowsDefender"]
+
+
+BROKER_URL = 'redis://10.11.65.34:6379/3'
+CELERY_RESULT_BACKEND = 'redis://10.11.65.34:6379/4'

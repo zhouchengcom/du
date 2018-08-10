@@ -33,10 +33,6 @@ MinioInit(
     app.config["MINIO"]["secure"],
 )
 
-
-
-
-
 # app.session_interface = MongoEngineSessionInterface(db)
 app.register_blueprint(virusmod, url_prefix="/api")
 

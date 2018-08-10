@@ -52,4 +52,12 @@ from minio.error import ResponseError
 
 import tempfile
 
-print(tempfile.NamedTemporaryFile().name)
+def test():
+    print("xxx")
+
+# print(tempfile.NamedTemporaryFile().name)
+
+print(locals())
+
+import os
+print(os.environ["ProgramFiles"])
