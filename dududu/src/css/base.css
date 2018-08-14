@@ -13,9 +13,10 @@
 }
 
 html {
-  background: url('../svg/send_bg.svg');
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'segoe ui',
-    'helvetica neue', helvetica, ubuntu, roboto, noto, arial, sans-serif;
+  background: url("../svg/send_bg.svg");
+  font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei UI",
+    "SF Pro Text", "segoe ui", "helvetica neue", helvetica, ubuntu, roboto, noto,
+    arial, sans-serif;
   font-weight: 200;
   background-size: 110%;
   background-repeat: no-repeat;
@@ -23,8 +24,9 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'segoe ui',
-    'helvetica neue', helvetica, ubuntu, roboto, noto, arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei UI",
+    "SF Pro Text", "segoe ui", "helvetica neue", helvetica, ubuntu, roboto, noto,
+    arial, sans-serif;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -97,7 +99,7 @@ a {
   border-radius: 6px 0 0 6px;
   font-size: 20px;
   color: var(--inputTextColor);
-  font-family: 'SF Pro Text', sans-serif;
+  font-family: "SF Pro Text", sans-serif;
   letter-spacing: 0;
   line-height: 23px;
   font-weight: 300;
@@ -230,7 +232,7 @@ a {
   margin: 20px auto;
   text-align: center;
   max-width: 520px;
-  font-family: 'SF Pro Text', sans-serif;
+  font-family:  "Microsoft YaHei UI","SF Pro Text", sans-serif;
   word-wrap: break-word;
 }
 

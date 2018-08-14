@@ -13,6 +13,7 @@ from minio import ResponseError
 import hashlib
 from datetime import timedelta
 from .task.scan import Scan
+import json
 
 mod = Blueprint("virus", __name__)
 
@@ -52,6 +53,35 @@ def FinishUpload(name):
             return jsonify({"md5": md5})
 
         GetMinio().make_bucket(md5)
+
+        policy_read_only = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Sid": "",
+                    "Effect": "Allow",
+                    "Principal": {"AWS": "*"},
+                    "Action": "s3:GetBucketLocation",
+                    "Resource": "arn:aws:s3:::%s" % md5,
+                },
+                {
+                    "Sid": "",
+                    "Effect": "Allow",
+                    "Principal": {"AWS": "*"},
+                    "Action": "s3:ListBucket",
+                    "Resource": "arn:aws:s3:::%s" % md5,
+                },
+                {
+                    "Sid": "",
+                    "Effect": "Allow",
+                    "Principal": {"AWS": "*"},
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::%s/*" % md5,
+                },
+            ],
+        }
+        logging.info(md5)
+        GetMinio().set_bucket_policy(md5, json.dumps(policy_read_only))
         GetMinio().copy_object(md5, name, "/%s/%s" % (uid, name))
         GetMinio().remove_object(uid, name)
     except ResponseError as err:
@@ -59,10 +89,12 @@ def FinishUpload(name):
 
     db = redis.from_url(conf["REDIS"])
 
+    createTime = int(time.time())
     scanviruskey = "virus:%s" % md5
     db.hset(scanviruskey, "state", "start")
-    db.hset(scanviruskey, "create_time", int(time.time()))
+    db.hset(scanviruskey, "createTime", createTime)
     db.hset(scanviruskey, "name", name)
+    db.hset(scanviruskey, "md5", md5)
 
     for v in conf["SCAN_TYPE"]:
         key = "virus:%s:%s" % (md5, v)
@@ -71,7 +103,9 @@ def FinishUpload(name):
 
         Scan.apply_async((md5, name, v, conf["REDIS"]), queue=v)
 
-    return jsonify({"md5": md5})
+    return jsonify(
+        {"md5": md5, "name": name, "createTime": createTime, "state": "start"}
+    )
 
 
 @mod.route("/scan/<name>", methods=["GET"])
@@ -88,10 +122,15 @@ def GetScanResult(name):
     for v in conf["SCAN_TYPE"]:
         key = "virus:%s:%s" % (name, v)
         value = db.hgetall(key)
-        result['list'][v] = value
+        result["list"][v] = value
         if "state" in value:
             if value["state"] != "end":
                 finish = False
     if finish:
-        result["state"] = "end" 
+        result["state"] = "end"
     return jsonify(result)
+
+
+@mod.route("/scan/types", methods=["GET"])
+def ScanTypes():
+    return jsonify(conf["SCAN_TYPE"])

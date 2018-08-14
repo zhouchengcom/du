@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Dropzone from "./Dropzone";
+import FileList from "./filelist"
 // Our app
 class Main extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class Main extends Component {
             </a>
           </div>
           <Dropzone  />
+          <FileList/>
         </div>
       </div>
     );

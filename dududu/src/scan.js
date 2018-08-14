@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { actions, Link } from "mirrorx";
 // Our app
 class Scan extends Component {
   constructor(props) {
@@ -17,6 +17,16 @@ class Scan extends Component {
         respond = await fetch(`/api/scan/${this.props.match.params.name}`);
         value = await respond.json();
         this.setState({ result: value });
+
+        var local = {};
+
+        for (var k in value.list) {
+          local[k] = value.list[k].result;
+        }
+        local["name"] = value.name;
+        local["state"] = value.state;
+        local["md5"] = value.md5;
+        actions.localFiles.update(value);
         if (value.state && value.state === "end") {
           return;
         }
@@ -41,7 +51,7 @@ class Scan extends Component {
             <td className="fileData fileData--overflow">{k}</td>
             <td className="fileData fileData--overflow">{v.state}</td>
             <td className="fileData fileData--overflow">{v.result || "--"}</td>
-            <td className="fileData fileData--overflow">{v.msg || "--"}</td>
+            <td className="fileData ">{v.msg || "--"}</td>
           </tr>
         );
       });
@@ -75,6 +85,11 @@ class Scan extends Component {
             </thead>
             <tbody className="fileList__body">{this.renderScanType()}</tbody>
           </table>
+          <div className="progressSection">
+            <Link className="btn " to="/">
+              返回
+            </Link>
+          </div>
         </div>
       </div>
     );

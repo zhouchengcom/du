@@ -75,7 +75,7 @@ class Fileuploader extends Component {
       );
       let value = await respond.json();
       console.log(value);
-
+      actions.localFiles.add(value);
       actions.routing.push(`/scan/${value.md5}`);
     } catch (err) {
       console.log(err);
