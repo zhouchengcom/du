@@ -6,16 +6,6 @@ services:
     ports:
       - "6379:6379"
 
-  nginx:
-    image: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./du/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./du/assets:/usr/share/nginx/html
-    links:
-      - minio
-      - web
 
 
   minio:
@@ -35,3 +25,13 @@ services:
     ports:
       - "9988:9988"
 
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./du/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./du/assets:/usr/share/nginx/html
+    links:
+      - minio
+      - web

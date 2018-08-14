@@ -6,4 +6,4 @@ EXPOSE 9988
 WORKDIR /home/server
 
 
-CMD ["gunicorn", "lic.web:app", "-c", "gunicorn_config.py"]
+CMD ["gunicorn", "dudu:app", "-c", "gunicorn_config.py"]
