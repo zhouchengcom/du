@@ -21,7 +21,7 @@ services:
   minio:
     image: minio/minio
     ports:
-      - "9000:9123"
+      - "9123:9000"
 
     volumes:
       - ./du/data:/data
