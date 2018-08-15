@@ -14,6 +14,7 @@ import hashlib
 from datetime import timedelta
 from .task.scan import Scan
 import json
+from urlparse import urlparse
 
 mod = Blueprint("virus", __name__)
 
@@ -32,6 +33,12 @@ def UploadUrl(name):
     # name = uuid.uuid4().hex[:12]
 
     url = GetMinio().presigned_put_object(uid, name, expires=timedelta(hours=2))
+    parseresult = urlparse(url)
+
+    url = url.replace(
+        parseresult.scheme + "://" + parseresult.hostname,
+        parseresult.scheme + "://" + conf["host"],
+    )
     return jsonify({"url": url, "name": name})
 
 

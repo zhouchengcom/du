@@ -1,29 +1,36 @@
 version: "3"
 
 services:
-  redis6379:
+  redis:
     image: redis:latest
     ports:
       - "6379:6379"
 
-
-
   minio:
     image: minio/minio
     ports:
-      - "9123:9000"
-
+      - "9123:9123"
+    environment:
+    - MINIO_ACCESS_KEY=M4UE4EE0UV36DFSMBAC2
+    - MINIO_SECRET_KEY=Vu8+9SWWjn/6Hlc+AdxjZv64wCj8kMQKI5nBNNcK
     volumes:
       - ./du/data:/data
+    command:  server /data --address ":9123" 
 
   web:
     build: ./server
     working_dir: /home/server
     volumes:
       - ./du/server:/home/server
-
+    links:
+      - minio
+      - redis
     ports:
       - "9988:9988"
+    depends_on:
+        - redis
+        - minio
+    command: gunicorn dudu.web:app -c gunicorn_config.py
 
   nginx:
     image: nginx
@@ -35,3 +42,6 @@ services:
     links:
       - minio
       - web
+    depends_on:
+        - web
+        - minio
