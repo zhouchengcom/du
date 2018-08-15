@@ -1,5 +1,6 @@
 
 
+
 MINIO = {
     "host": "minio:9123",
     "akey": "M4UE4EE0UV36DFSMBAC2",
