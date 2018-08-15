@@ -8,13 +8,13 @@ from ..minioclient import GetMinio
 import os
 import logging
 import subprocess
-
+import pprint
 
 conf = app.conf
 
 @app.task()
 def Scan(md5, name, vtype, dburl):
-    db = redis.from_url(dburl)
+    db = redis.from_url(conf["REDIS"])
 
     key = "virus:%s:%s" % (md5, vtype)
 
