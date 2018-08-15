@@ -14,7 +14,6 @@ mirror.model({
     add(old, value) {
       db.files.add(value).catch(function(error) {
         console.log(error);
-        // alert("Ooops: " + error);
       });
       old[value.md5] = value;
       return old;
@@ -23,12 +22,11 @@ mirror.model({
       console.log(value);
       db.files.update(value.md5, value).catch(function(error) {
         console.log(error);
-        // alert("Ooops: " + error);
       });
 
       old[value.md5] = { ...value, ...old[value.md5] };
 
-      return old;
+      return { ...old };
     },
     del(old, value) {
       db.files.delete(value.md5).catch(function(error) {

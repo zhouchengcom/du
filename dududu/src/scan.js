@@ -18,14 +18,6 @@ class Scan extends Component {
         value = await respond.json();
         this.setState({ result: value });
 
-        var local = {};
-
-        for (var k in value.list) {
-          local[k] = value.list[k].result;
-        }
-        local["name"] = value.name;
-        local["state"] = value.state;
-        local["md5"] = value.md5;
         actions.localFiles.update(value);
         if (value.state && value.state === "end") {
           return;
