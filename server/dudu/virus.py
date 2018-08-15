@@ -37,7 +37,7 @@ def UploadUrl(name):
 
     url = url.replace(
         parseresult.scheme + "://" + parseresult.hostname,
-        parseresult.scheme + "://" + conf["host"],
+        parseresult.scheme + "://" + conf["HOST"],
     )
     return jsonify({"url": url, "name": name})
 
