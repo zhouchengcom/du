@@ -21,7 +21,7 @@ class App extends Component {
         <header className="header">
           <div className="logo">
             <a href="/" className="logo__link">
-              <img src={send_logo} alt="Send" />
+              <img src={send_logo} alt="Scan" />
               <h1 className="logo__title">Send</h1>
             </a>
             <div className="logo__subtitle">
